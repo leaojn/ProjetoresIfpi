@@ -1,1 +1,1 @@
-web: gunicorn scrum.wsgi
+web: gunicorn scrum.wsgi --log-file -
