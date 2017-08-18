@@ -17,10 +17,13 @@ from django.conf.urls import url, include
 from rest_framework.authtoken.views import obtain_auth_token
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
+from scrum.board.urls import router
+
 
 template = "templates/admin/login.html"
 urlpatterns = [
     url(r'^api/token/', obtain_auth_token, name='api-token'),
     url(r'^', admin.site.urls, name='admin'),
+    url(r'^api/', include(router.urls)),
     url(r'^login/$', auth_views.login, {'template_name': template}, name='login'),
 ]
