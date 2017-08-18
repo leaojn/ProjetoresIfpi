@@ -13,4 +13,4 @@ class ProfessorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Professor
-        fields = ('id', 'name' )
+        fields = ('id', 'name',)
