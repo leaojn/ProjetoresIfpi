@@ -1,0 +1,58 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_static static material_form %}
+{% load static %}
+{% block extrastyle %}
+{{ block.super }}
+{{ media.css }}
+<style>
+    .btn {
+        background-color: #8CC63E;
+    }
+    .input-field .prefix.active{
+        color: #8CC63E;
+    }
+   input:not([type]):focus:not([readonly])+label,input[type=date]:focus:not([readonly])+label,input[type=datetime-local]:focus:not([readonly])+label,input[type=datetime]:focus:not([readonly])+label,input[type=email]:focus:not([readonly])+label,input[type=number]:focus:not([readonly])+label,input[type=password]:focus:not([readonly])+label,input[type=search]:focus:not([readonly])+label,input[type=tel]:focus:not([readonly])+label,input[type=text]:focus:not([readonly])+label,input[type=time]:focus:not([readonly])+label,input[type=url]:focus:not([readonly])+label,textarea.materialize-textarea:focus:not([readonly])+label {
+     color:#8CC63E
+   }
+</style>
+{% endblock %}
+
+{% block body %}
+    {% block main %}
+    <div class="registration" style="background-color: #">
+
+        <div class="sidebar z-depth-3">
+            <h4>{{ title }}</h4>
+
+            <form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
+                <input type="hidden" name="next" value="{{ next }}" />
+                
+                {% if 'username' in form.fields %}
+                    {% form %}
+                        {% part form.username prefix %}<i class="material-icons prefix">account_box</i>{% endpart %}
+                        {% part form.password prefix %}<i class="material-icons prefix">lock</i>{% endpart %}
+                    {% endform %}
+                    {% else %}
+                        {% form %}{% endform %}
+                    {% endif %}
+
+                    {% url 'admin_password_reset' as password_reset_url %}
+                    {% if password_reset_url %}
+                    <div class="password-reset-link">
+                        <a href="{{ password_reset_url }}">{% trans 'Forgot your password or username?' %}</a>
+                    </div>
+                    {% endif %}
+                    <div class="action right-align">
+                        <button type="submit" class="btn btn-primary">{% trans 'Log in' %}</button>
+                    </div>
+            </form>
+        </div>
+
+        {% block icon_wrapper %}
+        <div class="logo">
+            <img src="{% static 'admin/img/ifpi.png' %}" height="300px" >
+        </div>
+        {% endblock %}
+    </div>
+    {% endblock %}
+{% endblock %}
