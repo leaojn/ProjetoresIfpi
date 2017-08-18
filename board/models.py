@@ -17,7 +17,8 @@ class Professor(models.Model):
         return self.name or _(' %s') % self.end
 
     class Meta:
-        verbose_name = "Professor"
+        verbose_name = 'Professor'
+        verbose_name_plural = 'Professores'
 
 
 class Solicitacao(models.Model):
@@ -27,6 +28,9 @@ class Solicitacao(models.Model):
     data_de_saida = models.DateTimeField('Data de entrada', auto_now_add=False)
     observacao = models.TextField('descricao', max_length=256, blank=True)
 
+    class Meta:
+        verbose_name = 'Solicitacao'
+        verbose_name_plural = 'Solicitacoes'
 
 class Departamento(models.Model):
     name =  models.CharField(max_length=100, blank=True,default='')
@@ -34,6 +38,9 @@ class Departamento(models.Model):
     def __str__(self):
         return self.name or _(' %s') % self.end
 
+    class Meta:
+        verbose_name = 'Departamento'
+        verbose_name_plural = 'Departamentos'
 
 class Projetor(models.Model):
     departamento = models.ForeignKey('Departamento',related_name='projetores')
@@ -42,6 +49,9 @@ class Projetor(models.Model):
     manutencao = models.BooleanField(default=False)
     observacao = models.TextField('descricao', max_length=256, blank=True)
 
+    class Meta:
+        verbose_name = 'Projetor'
+        verbose_name_plural = 'Projetores'
 
 
 
