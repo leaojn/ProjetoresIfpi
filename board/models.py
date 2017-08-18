@@ -22,7 +22,7 @@ class Professor(models.Model):
 
 class Solicitacao(models.Model):
     professor = models.ForeignKey('Professor', related_name='solicitacoes')
-    cod_datashow = models.CharField(max_length=100, blank=True,default='')
+    data_show = models.ForeignKey('Projetor', related_name='solicitacao')
     data_de_entrada = models.DateTimeField('Data de entrada', auto_now_add=True)
     data_de_saida = models.DateTimeField('Data de entrada', auto_now_add=False)
     observacao = models.TextField('descricao', max_length=256, blank=True)

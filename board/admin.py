@@ -9,11 +9,11 @@ from .models import *
 @admin.register(Solicitacao)
 class SolicitacaoAdmin(admin.ModelAdmin):
     icon = '<i class="material-icons">assignment</i>'
-    list_display = ('professor', 'cod_datashow','data_de_entrada')
+    list_display = ('professor', 'data_show','data_de_entrada')
 
     fieldsets = (
         (None, {
-            'fields': (('professor', 'cod_datashow','data_de_saida'),)
+            'fields': (('professor', 'data_show','data_de_saida'),)
         }),
     )
 
