@@ -17,7 +17,7 @@ from django.conf.urls import url, include
 from rest_framework.authtoken.views import obtain_auth_token
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
-from scrum.board.urls import router
+from board.urls import router
 
 
 template = "templates/admin/login.html"
