@@ -15,9 +15,12 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from rest_framework.authtoken.views import obtain_auth_token
-from board.urls import router
+from django.contrib import admin
+from django.contrib.auth import views as auth_views
 
+template = "templates/admin/login.html"
 urlpatterns = [
     url(r'^api/token/', obtain_auth_token, name='api-token'),
-    url(r'^api/', include(router.urls)),
+    url(r'^admin/', admin.site.urls, name='admin'),
+    url(r'^admin/login/$', auth_views.login, {'template_name': template}, name='login'),
 ]

@@ -2,46 +2,46 @@
 from __future__ import unicode_literals
 
 from django.db import models
-
+import datetime
 # Create your models here.
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+from django.utils import timezone
+from django.core.validators import MaxValueValidator
 
-
-class Sprint(models.Model):
-
-    name = models.CharField(max_length=100, blank=True,default='')
-    description = models.TextField(blank=True,default='')
-    end = models.DateField(unique=True)
+class Professor(models.Model):
+    name =  models.CharField(max_length=100, blank=True,default='')
 
     def __str__(self):
+        return self.name or _(' %s') % self.end
 
-        return self.name or _('Sprint ending %s') % self.end
+    class Meta:
+        verbose_name = "Professor"
 
-class Task(models.Model):
 
-    STATUS_TODO = 1
-    STATUS_IN_PROGRESS = 2
-    STATUS_TESTING = 3
-    STATUS_DONE = 4
+class Solicitacao(models.Model):
+    professor = models.ForeignKey('Professor', related_name='solicitacoes')
+    cod_datashow = models.CharField(max_length=100, blank=True,default='')
+    data_de_entrada = models.DateTimeField('Data de entrada', auto_now_add=True)
+    data_de_saida = models.DateTimeField('Data de entrada', auto_now_add=False)
+    observacao = models.TextField('descricao', max_length=256, blank=True)
 
-    STATUS_CHOICE = (
-        (STATUS_TODO, _('Not Started')),
-        (STATUS_IN_PROGRESS, _('In Progress')),
-        (STATUS_TESTING, _('Testing')),
-        (STATUS_DONE, _('Done')),
-    )
 
-    name = models.CharField(max_length=100)
-    description = models.TextField(blank=True,default='')
-    sprint = models.ForeignKey(Sprint,blank=True,null=True)
-    status = models.SmallIntegerField(choices=STATUS_CHOICE,default=STATUS_TODO)
-    order = models.SmallIntegerField(default=0)
-    assigned = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True)
-    started = models.DateField(blank=True,null=True)
-    due = models.DateField(blank=True, null=True)
-    completed = models.DateField(blank=True, null=True)
+class Departamento(models.Model):
+    name =  models.CharField(max_length=100, blank=True,default='')
 
     def __str__(self):
-        return self.name
+        return self.name or _(' %s') % self.end
+
+
+class Projetor(models.Model):
+    departamento = models.ForeignKey('Departamento',related_name='projetores')
+    codigo = models.IntegerField(validators=[MaxValueValidator(999999)])
+    status = models.BooleanField(default=True)
+    manutencao = models.BooleanField(default=False)
+    observacao = models.TextField('descricao', max_length=256, blank=True)
+
+
+
+
