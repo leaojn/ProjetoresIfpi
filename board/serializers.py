@@ -9,7 +9,6 @@ from datetime import date
 
 class ProfessorSerializer(serializers.ModelSerializer):
 
-    links = serializers.SerializerMethodField()
 
     class Meta:
         model = Professor
