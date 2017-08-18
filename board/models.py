@@ -54,5 +54,5 @@ class Projetor(models.Model):
         verbose_name_plural = 'Projetores'
 
     def __str__(self):
-        return self.codigo or _(' %s') % self.end
+        return str(self.codigo)
 
