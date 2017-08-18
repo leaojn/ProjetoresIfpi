@@ -4,4 +4,4 @@ from . import views
 
 router = DefaultRouter()
 
-router.register(r'sprints', views.ProfessorViewSet)
+router.register(r'professores', views.ProfessorViewSet)

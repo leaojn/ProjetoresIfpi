@@ -7,5 +7,5 @@ class ProfessorViewSet(viewsets.ModelViewSet):
 
     queryset = Professor.objects.order_by('name')
     serializer_class =ProfessorSerializer
-    search_files = ('name')
+    search_fields = ('name')
     ordering_fields = ('name')
