@@ -26,4 +26,5 @@ urlpatterns = [
     url(r'^', admin.site.urls, name='admin'),
     url(r'^api/', include(router.urls)),
     url(r'^login/$', auth_views.login, {'template_name': template}, name='login'),
+    url(r'',include('board.urls'))
 ]
