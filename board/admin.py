@@ -53,10 +53,9 @@ class SolicitacaoAdmin(admin.ModelAdmin):
         # Not too much elegant but works to hide show_save_and_add_another button
         readonly_fields = super(SolicitacaoAdmin, self).get_readonly_fields(request)
 
-        # if '/add/' in str(request):
-        #     return True
-        if '/change/' in str(request):
-            return False
+        if not request.user.is_superuser:
+              if '/change/' in str(request):
+                return False
         return True
 
     def get_actions(self, request):  # Disabling delete for venue-owner
