@@ -11,7 +11,7 @@ from django.utils import timezone
 from django.core.validators import MaxValueValidator
 
 class Professor(models.Model):
-    name = models.CharField(max_length=100, blank=True, default='')
+    name = models.CharField(max_length=50, blank=True, default='')
 
     def __str__(self):
         return self.name or _(' %s') % self.end
