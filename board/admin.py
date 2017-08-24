@@ -1,8 +1,16 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 import datetime
+from django.utils.safestring import mark_safe
+from django.urls import reverse
+from django.conf.urls import url
+from django.utils.html import format_html
+from django.core.urlresolvers import reverse
 from django.contrib import admin
 from .models import *
+from board.views import GeneratePdf
+
+
 # Register your models here.
 
 class ReadOnlyModelAdmin(admin.ModelAdmin):
@@ -26,18 +34,17 @@ class ReadOnlyModelAdmin(admin.ModelAdmin):
 @admin.register(Solicitacao)
 class SolicitacaoAdmin(admin.ModelAdmin):
     icon = '<i class="material-icons">assignment</i>'
-    list_display = ('professor', 'data_show', 'data_de_entrada',)
-
+    list_display = ('professor', 'data_show', 'data_de_entrada', 'get_pdf')
     fieldsets = (
         (None, {
             'fields': (('professor', 'data_show',),)
         }),
     )
 
-    # def get_form(self, request, obj=None, **kwargs):
-    #     form = super(SolicitacaoAdmin, self).get_form(request, obj, **kwargs)
-    #     form.base_fields['data_show'].queryset = Projetor.objects.filter(manutencao=False, status=False)
-    #     return form
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(SolicitacaoAdmin, self).get_form(request, obj, **kwargs)
+        form.base_fields['data_show'].queryset = Projetor.objects.filter(manutencao=False, status=False)
+        return form
 
     def save_model(self, request, obj, form, change):
         if not obj.pk:
@@ -49,12 +56,23 @@ class SolicitacaoAdmin(admin.ModelAdmin):
             obj.devolucao = devolucao
         obj.save()
 
+    def get_urls(self):
+        urls = super(SolicitacaoAdmin, self).get_urls()
+        my_urls = [
+            url(r'pdf/$', GeneratePdf.as_view(), name="gerar-pdf"),
+        ]
+
+        return my_urls + urls
+
+    def get_pdf(self, obj):
+        return ""
+
+    get_pdf.short_description = mark_safe('<a class="btn red white-text"  href="pdf/" >Gerar PDF</a>')
+
     def has_change_permission(self, request, obj=None):
-        # Not too much elegant but works to hide show_save_and_add_another button
-        readonly_fields = super(SolicitacaoAdmin, self).get_readonly_fields(request)
 
         if not request.user.is_superuser:
-              if '/change/' in str(request):
+            if '/change/' in str(request):
                 return False
         return True
 

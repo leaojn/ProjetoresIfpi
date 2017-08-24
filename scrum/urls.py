@@ -18,7 +18,8 @@ from rest_framework.authtoken.views import obtain_auth_token
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from board.urls import router
-
+from board.views import GeneratePdf
+from django.contrib.contenttypes import views as contenttype_views
 
 template = "templates/admin/login.html"
 urlpatterns = [
@@ -26,5 +27,7 @@ urlpatterns = [
     url(r'^', admin.site.urls, name='admin'),
     # url(r'^api/', include(router.urls)),
     url(r'^login/$', auth_views.login, {'template_name': template}, name='login'),
-    url(r'^', include('board.urls')),
+    # url('^', include('board.urls', namespace="board")),
+    url(r'^r/(?P<content_type_id>\d+)/(?P<object_id>.+)/', include('board.urls'),
+        name='view_on_site'),
 ]

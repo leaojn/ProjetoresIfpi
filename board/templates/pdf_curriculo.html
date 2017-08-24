@@ -38,8 +38,13 @@
 				<td>{{ i.chave }}</td>
 				<td>{{ i.data_show }}</td>
 				<td>{{ i.matricula }}</td>
-				<td>12/01/2007</td>
-				<td>12/01/2007</td>
+				<td>{{i.data_de_entrada}}</td>
+				{% if i.devolucao.status %}
+				<td>{{i.devolucao.dt_horario_devolucao}}</td>
+				{% else %}
+				<td>Não devolvido</td>
+				{% endif %}
+
 			</tr>
 			{% endfor %}
 		</tbody>
