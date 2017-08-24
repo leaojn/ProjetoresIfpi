@@ -18,7 +18,7 @@ class GeneratePdf(View):
         template = get_template('pdf_curriculo.html')
         context = {
             # "nome_id": request.user.user_curriculo.email,
-            "obj": Solicitacao.objects.all(),
+            "data": Solicitacao.objects.all(),
             "telefone" : '31313',
             # "email": request.user.email,
             # "rg": request.user.user_curriculo.rg,

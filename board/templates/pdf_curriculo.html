@@ -1,62 +1,49 @@
-<html>
+<!doctype html>
+<html lang=en>
 <head>
-    <title>Meu Curriculo</title>
-    <style type="text/css">
-        body {
-            font-weight: 200;
-            font-size: 12px;
-        }
-
-        h1 {
-            border-bottom: -15px;
-        }
-        .header {
-            font-size: 20px;
-            font-weight: 100;
-            text-align: center;
-            color: #007cae;
-        }
-        .title {
-            font-size: 18px;
-            font-weight: 100;
-            /* text-align: right;*/
-            padding: 10px 20px 0px 20px;
-        }
-        .title span {
-            color: #007cae;
-        }
-        .details {
-            padding: 10px 20px 0px 20px;
-            text-align: left !important;
-            /*margin-left: 40%;*/
-        }
-        .hrItem {
-            border: none;
-            height: 1px;
-            border-bottom: -15px;
-            /* Set the hr color */
-            color: #333; /* old IE */
-            background-color: #fff; /* Modern Browsers */
-        }
-    </style>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link rel="stylesheet" href="">
+	<style>
+		/*@page { margin: 1em; }*/
+      	/*@page { size: US-Letter landscape; }*/
+		h1{text-align: center;}
+		table{width: 100%;border-collapse: collapse;}
+		body{font-size: 9pt;text-align:center;}
+		td, th {border: 1px solid black;}
+	</style>
 </head>
 <body>
-<div class='wrapper'>
-    <div class='header'>
-        <p class='title'>Meu Curriculo</p>
-    </div>
-    <div>
-        <div class='details'>
-            <h1>Dados Pessoais</h1>
-            {% for o in obj %}
-            <hr class='hrItem' />
-            Nome: {{ o.professor }}<br/>
-            Telefone: {{ telefone }}<br/>
-            {% endfor %}
+	<img src="logo.jpg" alt="">
+	<div class="cabecalho">
+		<h1>IFPI - Instituto Federal do Piaui</h1>
+		<h2>Controle de chaves e de Entregas dos Data Show</h2>
+	</div>
+	<br><br><br>
+	<table>
+		<thead>
+			<tr>
+				<th>Nome Completo</th>
+				<th>Nº da chave</th>
+				<th>Nº do patrimônio</th>
+				<th>Matricula: <br>Bolsista/Monitor</th>
+				<th>Date de Solicitacao</th>
+				<th>Date de Entrega</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for i in data %}
+			<tr>
+				<td>{{ i.professor }}</td>
+				<td>{{ i.chave }}</td>
+				<td>{{ i.data_show }}</td>
+				<td>{{ i.matricula }}</td>
+				<td>12/01/2007</td>
+				<td>12/01/2007</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
 
-
-        </div>
-    </div>
 </body>
 </html>
-
