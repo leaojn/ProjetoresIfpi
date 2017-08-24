@@ -10,6 +10,7 @@ from django.conf import settings
 from django.utils import timezone
 from django.core.validators import MaxValueValidator
 
+
 class Professor(models.Model):
     name = models.CharField(max_length=50, blank=True, default='')
 
@@ -26,7 +27,7 @@ class Solicitacao(models.Model):
     data_show = models.ForeignKey('Projetor', related_name='solicitacao')
     data_de_entrada = models.DateTimeField('Data de entrada', auto_now_add=True)
     observacao = models.TextField('descricao', max_length=256, blank=True)
-    devolucao = models.OneToOneField('Devolucao',blank=True, null=True)
+    devolucao = models.OneToOneField('Devolucao', blank=True, null=True)
 
     class Meta:
         verbose_name = 'Solicitação'
@@ -37,11 +38,11 @@ class Solicitacao(models.Model):
         return Projetor.objects.all().filter(manutencao=False)
 
     def __str__(self):
-            return  'Professor(a):' +  self.professor.name + '  ' +'[ Cod data show: '+ self.data_show.__str__() + ']'
+        return 'Professor(a):' + self.professor.name + '  ' + '[ Cod data show: ' + self.data_show.__str__() + ']'
 
 
 class Departamento(models.Model):
-    name =  models.CharField(max_length=100, blank=True,default='')
+    name = models.CharField(max_length=100, blank=True, default='')
 
     def __str__(self):
         return self.name or _(' %s') % self.end
@@ -50,8 +51,9 @@ class Departamento(models.Model):
         verbose_name = 'Departamento'
         verbose_name_plural = 'Departamentos'
 
+
 class Projetor(models.Model):
-    departamento = models.ForeignKey('Departamento',related_name='projetores')
+    departamento = models.ForeignKey('Departamento', related_name='projetores')
     codigo = models.IntegerField(validators=[MaxValueValidator(999999)])
     status = models.BooleanField(default=False)
     manutencao = models.BooleanField(default=False)
@@ -72,6 +74,7 @@ class Projetor(models.Model):
     def __str__(self):
         return str(self.codigo)
 
+
 class Devolucao(models.Model):
     dt_horario_devolucao = models.DateTimeField('Devolucao', auto_now_add=False, null=True)
     status = models.BooleanField(default=False)
@@ -79,4 +82,3 @@ class Devolucao(models.Model):
     class Meta:
         verbose_name = 'Devoluçao'
         verbose_name_plural = 'Devoluçoes'
-

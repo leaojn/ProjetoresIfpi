@@ -5,11 +5,28 @@ from django.contrib import admin
 from .models import *
 # Register your models here.
 
+class ReadOnlyModelAdmin(admin.ModelAdmin):
+    actions = None
+
+    def get_readonly_fields(self, request, obj=None):
+        return self.fields or [f.name for f in self.model._meta.fields]
+
+    def has_add_permission(self, request):
+        return True
+
+        # Allow viewing objects but not actually changing them.
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
 
 @admin.register(Solicitacao)
 class SolicitacaoAdmin(admin.ModelAdmin):
     icon = '<i class="material-icons">assignment</i>'
-    list_display = ('professor', 'data_show','data_de_entrada',)
+    list_display = ('professor', 'data_show', 'data_de_entrada',)
 
     fieldsets = (
         (None, {
@@ -17,19 +34,40 @@ class SolicitacaoAdmin(admin.ModelAdmin):
         }),
     )
 
-    def get_form(self, request, obj=None, **kwargs):
-        form = super(SolicitacaoAdmin, self).get_form(request, obj, **kwargs)
-        form.base_fields['data_show'].queryset = Projetor.objects.filter(manutencao=False, status=False)
-        return form
+    # def get_form(self, request, obj=None, **kwargs):
+    #     form = super(SolicitacaoAdmin, self).get_form(request, obj, **kwargs)
+    #     form.base_fields['data_show'].queryset = Projetor.objects.filter(manutencao=False, status=False)
+    #     return form
 
     def save_model(self, request, obj, form, change):
         if not obj.pk:
+            obj.save()
             obj.data_show.status = True
             obj.data_show.save()
             devolucao = Devolucao()
             devolucao.save()
             obj.devolucao = devolucao
         obj.save()
+
+    def has_change_permission(self, request, obj=None):
+        # Not too much elegant but works to hide show_save_and_add_another button
+        readonly_fields = super(SolicitacaoAdmin, self).get_readonly_fields(request)
+
+        # if '/add/' in str(request):
+        #     return True
+        if '/change/' in str(request):
+            return False
+        return True
+
+    def get_actions(self, request):  # Disabling delete for venue-owner
+        actions = super(SolicitacaoAdmin, self).get_actions(request)
+
+        if not request.user.is_superuser:
+            if 'delete_selected' in actions:
+                del actions['delete_selected']
+
+        return actions
+
 
 @admin.register(Professor)
 class ProfessorAdmin(admin.ModelAdmin):
@@ -40,16 +78,19 @@ class ProfessorAdmin(admin.ModelAdmin):
             'fields': ('name',)
         }),
     )
+
+
 @admin.register(Projetor)
 class ProjetorAdmin(admin.ModelAdmin):
     icon = '<i class="material-icons">video_label</i>'
-    list_display = ('codigo','departamento','status')
+    list_display = ('codigo', 'departamento', 'status')
 
     fieldsets = (
         (None, {
-            'fields': ('codigo','departamento','observacao','manutencao')
+            'fields': ('codigo', 'departamento', 'observacao', 'manutencao')
         }),
     )
+
 
 @admin.register(Departamento)
 class DepatarmentAdmin(admin.ModelAdmin):
@@ -62,6 +103,7 @@ class DepatarmentAdmin(admin.ModelAdmin):
         }),
     )
 
+
 @admin.register(Devolucao)
 class DevolucaoAdmin(admin.ModelAdmin):
     icon = '<i class="material-icons">assignment</i>'
@@ -69,7 +111,7 @@ class DevolucaoAdmin(admin.ModelAdmin):
     # readonly_fields = ['solicitacao_n']
     fieldsets = (
         (None, {
-            'fields': (( 'status',),)
+            'fields': (('status',),)
         }),
     )
 
@@ -80,4 +122,3 @@ class DevolucaoAdmin(admin.ModelAdmin):
             solicitacao = Solicitacao.objects.get(devolucao=obj)
             solicitacao.data_show.status = False
             solicitacao.data_show.save()
-

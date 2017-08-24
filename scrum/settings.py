@@ -79,14 +79,14 @@ WSGI_APPLICATION = 'scrum.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'osm',
-#         'USER':'postgres',
-#         'PASSWORD':'admin',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'osm',
+        'USER':'postgres',
+        'PASSWORD':'admin',
+    }
+}
 
 
 # Password validation
@@ -122,12 +122,12 @@ USE_L10N = True
 USE_TZ = True
 import dj_database_url
 
-from decouple import config
-
-DATABASES = { 'default': dj_database_url.config() }
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
-ALLOWED_HOSTS = ['*']
+# from decouple import config
+#
+# DATABASES = { 'default': dj_database_url.config() }
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+#
+# ALLOWED_HOSTS = ['*']
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
