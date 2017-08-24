@@ -1,0 +1,62 @@
+<html>
+<head>
+    <title>Meu Curriculo</title>
+    <style type="text/css">
+        body {
+            font-weight: 200;
+            font-size: 12px;
+        }
+
+        h1 {
+            border-bottom: -15px;
+        }
+        .header {
+            font-size: 20px;
+            font-weight: 100;
+            text-align: center;
+            color: #007cae;
+        }
+        .title {
+            font-size: 18px;
+            font-weight: 100;
+            /* text-align: right;*/
+            padding: 10px 20px 0px 20px;
+        }
+        .title span {
+            color: #007cae;
+        }
+        .details {
+            padding: 10px 20px 0px 20px;
+            text-align: left !important;
+            /*margin-left: 40%;*/
+        }
+        .hrItem {
+            border: none;
+            height: 1px;
+            border-bottom: -15px;
+            /* Set the hr color */
+            color: #333; /* old IE */
+            background-color: #fff; /* Modern Browsers */
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+    <div class='header'>
+        <p class='title'>Meu Curriculo</p>
+    </div>
+    <div>
+        <div class='details'>
+            <h1>Dados Pessoais</h1>
+            {% for o in obj %}
+            <hr class='hrItem' />
+            Nome: {{ o.professor }}<br/>
+            Telefone: {{ telefone }}<br/>
+            {% endfor %}
+
+
+        </div>
+    </div>
+</body>
+</html>
+

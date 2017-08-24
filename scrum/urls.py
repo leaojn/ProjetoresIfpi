@@ -24,6 +24,7 @@ template = "templates/admin/login.html"
 urlpatterns = [
     url(r'^api/token/', obtain_auth_token, name='api-token'),
     url(r'^', admin.site.urls, name='admin'),
-    url(r'^api/', include(router.urls)),
+    # url(r'^api/', include(router.urls)),
     url(r'^login/$', auth_views.login, {'template_name': template}, name='login'),
+    url(r'^', include('board.urls')),
 ]
