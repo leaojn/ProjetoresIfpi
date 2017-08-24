@@ -43,13 +43,13 @@ class SolicitacaoAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(SolicitacaoAdmin, self).get_form(request, obj, **kwargs)
-        form.base_fields['data_show'].queryset = Projetor.objects.filter(manutencao=False, status=False)
+        form.base_fields['data_show'].queryset = Projetor.objects.filter(status='D')
         return form
 
     def save_model(self, request, obj, form, change):
         if not obj.pk:
             obj.save()
-            obj.data_show.status = True
+            obj.data_show.status = 'U'
             obj.data_show.save()
             devolucao = Devolucao()
             devolucao.save()
@@ -104,10 +104,20 @@ class ProjetorAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (None, {
-            'fields': ('codigo', 'departamento', 'observacao', 'manutencao')
+            'fields': ('codigo', 'departamento', 'observacao','manutencao')
         }),
     )
-
+    def save_model(self, request, obj, form, change):
+        if obj.status != 'U':
+            if obj.manutencao == True:
+                obj.status = 'M'
+                obj.save()
+            else:
+                obj.status = 'D'
+                obj.save()
+        else:
+            obj.manutencao = False
+            obj.save()
 
 @admin.register(Departamento)
 class DepatarmentAdmin(admin.ModelAdmin):
@@ -137,5 +147,5 @@ class DevolucaoAdmin(admin.ModelAdmin):
             obj.dt_horario_devolucao = datetime.datetime.now()
             obj.save()
             solicitacao = Solicitacao.objects.get(devolucao=obj)
-            solicitacao.data_show.status = False
+            solicitacao.data_show.status = 'D'
             solicitacao.data_show.save()

@@ -1,15 +1,19 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
-from django.db import models
 import datetime
-# Create your models here.
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from django.conf import settings
-from django.utils import timezone
 from django.core.validators import MaxValueValidator
+# Create your models here.
 
+
+
+STATUS = (
+    ('D', 'Disponivel'),
+    ('M', 'Manutenção'),
+    ('U', 'Uso'),
+    ('R', 'Reservado'),
+)
 
 class Professor(models.Model):
     name = models.CharField(max_length=50, blank=True, default='')
@@ -55,9 +59,9 @@ class Departamento(models.Model):
 class Projetor(models.Model):
     departamento = models.ForeignKey('Departamento', related_name='projetores')
     codigo = models.IntegerField(validators=[MaxValueValidator(999999)])
-    status = models.BooleanField(default=False)
-    manutencao = models.BooleanField(default=False)
+    status= models.CharField(verbose_name='Status', max_length=1, choices=STATUS, default='D')
     observacao = models.TextField('descricao', max_length=256, blank=True)
+    manutencao = models.BooleanField(blank=True, null=False, default=False)
 
     class Meta:
         verbose_name = 'Projetor'
@@ -82,3 +86,5 @@ class Devolucao(models.Model):
     class Meta:
         verbose_name = 'Devoluçao'
         verbose_name_plural = 'Devoluçoes'
+
+
