@@ -1,14 +1,25 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
-from django.db import models
 import datetime
-# Create your models here.
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from django.conf import settings
-from django.utils import timezone
 from django.core.validators import MaxValueValidator
+from django.contrib.auth import get_user_model
+# Create your models here.
+
+User = get_user_model()
+
+STATUS = (
+    ('D', 'Disponivel'),
+    ('M', 'Manutenção'),
+    ('U', 'Uso'),
+    ('R', 'Reservado'),
+)
+STATUS_LABORATORIO = (
+    ('O', 'Ocupado'),
+    ('L', 'Livre'),
+
+)
 
 
 class Professor(models.Model):
@@ -28,6 +39,8 @@ class Solicitacao(models.Model):
     data_de_entrada = models.DateTimeField('Data de entrada', auto_now_add=True)
     observacao = models.TextField('descricao', max_length=256, blank=True)
     devolucao = models.OneToOneField('Devolucao', blank=True, null=True)
+    laboratorio = models.ForeignKey('Laboratorio', related_name='solicitacoes', blank=True, null=True)
+    user = models.ForeignKey(User,related_name='solicitacoes', blank=False, null=True)
 
     class Meta:
         verbose_name = 'Solicitação'
@@ -35,7 +48,7 @@ class Solicitacao(models.Model):
 
     @property
     def projetor_disponivel(self):
-        return Projetor.objects.all().filter(manutencao=False)
+        return Projetor.objects.all().filter(status='D')
 
     def __str__(self):
         return 'Professor(a):' + self.professor.name + '  ' + '[ Cod data show: ' + self.data_show.__str__() + ']'
@@ -55,21 +68,13 @@ class Departamento(models.Model):
 class Projetor(models.Model):
     departamento = models.ForeignKey('Departamento', related_name='projetores')
     codigo = models.IntegerField(validators=[MaxValueValidator(999999)])
-    status = models.BooleanField(default=False)
-    manutencao = models.BooleanField(default=False)
+    status = models.CharField(verbose_name='Status', max_length=1, choices=STATUS, default='D')
     observacao = models.TextField('descricao', max_length=256, blank=True)
+    manutencao = models.BooleanField(blank=True, null=False, default=False)
 
     class Meta:
         verbose_name = 'Projetor'
         verbose_name_plural = 'Projetores'
-
-    @property
-    def projetor_manutencao(self):
-        return Projetor.objects.filter(manutencao=True)
-
-    @property
-    def projetor_alugado(self):
-        return Projetor.objects.filter(status=True)
 
     def __str__(self):
         return str(self.codigo)
@@ -82,3 +87,15 @@ class Devolucao(models.Model):
     class Meta:
         verbose_name = 'Devoluçao'
         verbose_name_plural = 'Devoluçoes'
+
+
+class Laboratorio(models.Model):
+    name = models.CharField('Chave', max_length=5)
+    status = models.CharField(verbose_name='Status', max_length=1, choices=STATUS_LABORATORIO, default='L')
+
+    class Meta:
+        verbose_name = 'Laboratorio'
+        verbose_name_plural = 'Laboratorios'
+
+    def __str__(self):
+        return self.name

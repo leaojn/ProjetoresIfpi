@@ -28,6 +28,5 @@ urlpatterns = [
     # url(r'^api/', include(router.urls)),
     url(r'^login/$', auth_views.login, {'template_name': template}, name='login'),
     # url('^', include('board.urls', namespace="board")),
-    url(r'^r/(?P<content_type_id>\d+)/(?P<object_id>.+)/', include('board.urls'),
-        name='view_on_site'),
+
 ]
