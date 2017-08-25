@@ -34,21 +34,25 @@ class ReadOnlyModelAdmin(admin.ModelAdmin):
 @admin.register(Solicitacao)
 class SolicitacaoAdmin(admin.ModelAdmin):
     icon = '<i class="material-icons">assignment</i>'
-    list_display = ('professor', 'data_show', 'data_de_entrada', 'get_pdf')
+    list_display = ('professor', 'data_show', 'data_de_entrada','laboratorio' ,'get_pdf')
     fieldsets = (
         (None, {
-            'fields': (('professor', 'data_show',),)
+            'fields': (('professor', 'data_show', 'laboratorio'),)
         }),
     )
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(SolicitacaoAdmin, self).get_form(request, obj, **kwargs)
         form.base_fields['data_show'].queryset = Projetor.objects.filter(status='D')
+        form.base_fields['laboratorio'].queryset = Projetor.objects.filter(status='L')
         return form
 
     def save_model(self, request, obj, form, change):
         if not obj.pk:
+            obj.user = request.user
             obj.save()
+            obj.laboratorio.status = 'O'
+            obj.laboratorio.save()
             obj.data_show.status = 'U'
             obj.data_show.save()
             devolucao = Devolucao()
@@ -93,6 +97,17 @@ class ProfessorAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields': ('name',)
+        }),
+    )
+
+
+@admin.register(Laboratorio)
+class LaboratorioAdmin(admin.ModelAdmin):
+    icon = '<i class="material-icons">home</i>'
+    list_display = ('name', 'status')
+    fieldsets = (
+        (None, {
+            'fields': ('name', 'status')
         }),
     )
 
@@ -147,5 +162,7 @@ class DevolucaoAdmin(admin.ModelAdmin):
             obj.dt_horario_devolucao = datetime.datetime.now()
             obj.save()
             solicitacao = Solicitacao.objects.get(devolucao=obj)
+            solicitacao.laboratorio.status = 'L'
+            solicitacao.laboratorio.save()
             solicitacao.data_show.status = 'D'
             solicitacao.data_show.save()
