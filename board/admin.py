@@ -50,10 +50,10 @@ class SolicitacaoAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         if not obj.pk:
             obj.user = request.user
-            obj.save()
             obj.laboratorio.status = 'O'
             obj.laboratorio.save()
             obj.data_show.status = 'U'
+            obj.data_show.save()
             obj.data_show.save()
             devolucao = Devolucao()
             devolucao.save()
