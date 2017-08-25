@@ -44,7 +44,7 @@ class SolicitacaoAdmin(admin.ModelAdmin):
     def get_form(self, request, obj=None, **kwargs):
         form = super(SolicitacaoAdmin, self).get_form(request, obj, **kwargs)
         form.base_fields['data_show'].queryset = Projetor.objects.filter(status='D')
-        form.base_fields['laboratorio'].queryset = Projetor.objects.filter(status='L')
+        form.base_fields['laboratorio'].queryset = Laboratorio.objects.filter(status='L')
         return form
 
     def save_model(self, request, obj, form, change):
