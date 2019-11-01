@@ -49,7 +49,7 @@ idna==2.5
 lxml==3.8.0
 Markdown==2.6.8
 olefile==0.44
-Pillow==4.2.1
+Pillow==6.2.0
 psycopg2==2.7.1
 pycparser==2.18
 PyPDF2==1.26.0
