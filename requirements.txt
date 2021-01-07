@@ -46,7 +46,7 @@ gunicorn==19.7.1
 html5lib==1.0b10
 httplib2==0.10.3
 idna==2.5
-lxml==3.8.0
+lxml==4.6.2
 Markdown==2.6.8
 olefile==0.44
 Pillow==4.2.1
